@@ -1,0 +1,27 @@
+extends layout 
+
+block content 
+    h1 Update Book
+    if errors 
+      each error in errors 
+       p.error=error 
+    form(method="post", action="/books/" + book.id)
+     div 
+        label(for="title") Title 
+        input(type="text", name="title", id="title", value=book.title || '') 
+     div 
+        label(for="author") Author  
+        input(type="text", name="author", id="author", value=book.author || '')
+     div 
+        label(for="genre") Genre 
+        input(type="text", name="genre", id="genre", value=book.genre || '')
+     div 
+        label(for="year") Year 
+        input(type="text", name="year", id="year", value=book.year || '')
+     div
+        button(type="submit") Edit Book
+
+    a(href="/books") Cancel 
+
+    form(method="post", action='/books/' + book.id +"/delete") 
+      button(type="submit") Delete Book

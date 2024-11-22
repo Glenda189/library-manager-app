@@ -1,0 +1,31 @@
+extends layout.pug
+
+block content
+  h1 Books
+  a(href='/books/new') Add New Book
+
+  form(method="get", action="/books")
+    input(type="text", name="search", placeholder="Search for books..." value=search)
+    button(type="submit") Search
+
+  // Table to display books
+  table
+    thead
+      tr
+        th Title
+        th Author
+        th Genre
+        th Year 
+        th Actions
+    tbody
+      each book in books
+        tr
+          td
+            a(href='/books/' + book.id)=book.title
+          td= book.author
+          td= book.genre
+          td= book.year
+          td
+            a(href='/books/' + book.id) Edit
+            form(action='/books/' + book.id + '/delete', method='POST')
+              button(type='submit') Delete
