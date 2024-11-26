@@ -1,33 +1,27 @@
 extends layout
 
 block content
-  h1 New Book
-  form(method="post", action="/books/new")
-    div
-      label(for="title") Title
-      input(type="text", name="title", id="title", value=book && book.title ? book.title : '')
-      if errors
+  h2 Create New Book
+  form(method="post" action="/books/new")
+    p
+    if errors && errors.length > 0
+      h2.error Ooooops!
+      ul.error
         each error in errors
-          if error.includes('Title')
-            p.error= error
-
-    div
-      label(for="author") Author
-      input(type="text", name="author", id="author", value=book && book.author ? book.author : '')
-      if errors
-        each error in errors
-          if error.includes('Author')
-            p.error= error
-
-    div
-      label(for="genre") Genre
-      input(type="text", name="genre", id="genre", value=book && book.genre ? book.genre : '')
-
-    div
-      label(for="year") Year
-      input(type="text", name="year", id="year", value=book && book.year ? book.year : '')
-
-    div
-      button(type="submit") Create New Book
-
-    a(href="/books") Cancel
+          li #{error.message}
+    p
+      label(for="title") Title:
+      input(type="text", name="title", id="title", value=book.title)
+    p
+      label(for="author") Author:
+      input(type="text", name="author", id="author", value=book.author)
+    p
+      label(for="genre") Genre:
+      input(type="text", name="genre", id="genre", value=book.genre)
+    p
+      label(for="year") Year:
+      input(type="text", name="year", id="year", value=book.year)
+    p
+      input(type="submit" value="Create New Book")
+    p
+      a.button(href="/books") Cancel
