@@ -26,5 +26,20 @@ block content
           td #{book.genre}
           td #{book.year}
           td
-
+    //- Pagination?? 
+  if totalPages > 1
+    nav.pagination
+      if currentPage > 1
+        a(href=`/books?page=${currentPage - 1}&search=${searchQuery}`) Previous
+      else
+        span.disabled Previous
+      each page in Array(totalPages).fill().map((_, i) => i + 1)
+        if page === currentPage
+          span.current #{page}
+        else
+          a(href=`/books?page=${page}&search=${searchQuery}`) #{page}
+      if currentPage < totalPages
+        a(href=`/books?page=${currentPage + 1}&search=${searchQuery}`) Next
+      else
+        span.disabled Next
             

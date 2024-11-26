@@ -3,11 +3,15 @@ const router = express.Router();
 const { Book } = require("../models");
 const { Sequelize } = require("sequelize"); // Ensure Sequelize is imported
 
-//Display all books and search 
+//Display all books and search and pagination 
 router.get("/", async (req, res, next) => {
   const search = req.query.search || ""; // Capture search query, default to empty string
+  const page = parseInt(req.query.page) || 1; //set default to 1 
+  const limit = 5;
+  const offset = (page - 1) * limit;
   try {
-    const books = await Book.findAll({
+  // Fetch books with search and pagination 
+    const {rows: books, count} = await Book.findAndCountAll({
       where: {
         [Sequelize.Op.or]: [
           { title: { [Sequelize.Op.like]: `%${search}%` } },
@@ -16,11 +20,15 @@ router.get("/", async (req, res, next) => {
           { year: { [Sequelize.Op.like]: `%${search}%` } },
         ],
       },
+      limit, 
+      offset,
     });
-    console.log("Books fetched:", books);
-    res.render("index", { books, searchQuery: search }); // Pass books and the search query
+    const totalPages = Math.ceil(count / limit);
+    // console.log("Books fetched:", books);
+    res.render("index", { books, searchQuery: search, currentPage: page, totalPages,
+     }); // Pass books and the search query
   } catch (error) {
-    console.error("Error fetching books:", error);
+    // console.error("Error fetching books with pagination:", error);
     next(error);
   }
 });
